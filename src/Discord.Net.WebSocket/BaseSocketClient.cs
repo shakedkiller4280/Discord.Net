@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Discord.API;
@@ -55,7 +55,7 @@ namespace Discord.WebSocket
         public Task<IReadOnlyCollection<RestConnection>> GetConnectionsAsync(RequestOptions options = null)
             => ClientHelper.GetConnectionsAsync(this, options ?? RequestOptions.Default);
         /// <inheritdoc />
-        public Task<RestInvite> GetInviteAsync(string inviteId, RequestOptions options = null)
+        public Task<RestInviteMetadata> GetInviteAsync(string inviteId, RequestOptions options = null)
             => ClientHelper.GetInviteAsync(this, inviteId, options ?? RequestOptions.Default);
         
         // IDiscordClient

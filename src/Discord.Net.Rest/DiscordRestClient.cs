@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Threading.Tasks;
@@ -56,7 +56,7 @@ namespace Discord.Rest
             => ClientHelper.GetConnectionsAsync(this, options);
 
         /// <inheritdoc />
-        public Task<RestInvite> GetInviteAsync(string inviteId, RequestOptions options = null)
+        public Task<RestInviteMetadata> GetInviteAsync(string inviteId, RequestOptions options = null)
             => ClientHelper.GetInviteAsync(this, inviteId, options);
 
         /// <inheritdoc />

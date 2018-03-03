@@ -1,4 +1,4 @@
-﻿using Discord.API.Rest;
+using Discord.API.Rest;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -50,12 +50,12 @@ namespace Discord.Rest
             return models.Select(x => RestConnection.Create(x)).ToImmutableArray();
         }
         
-        public static async Task<RestInvite> GetInviteAsync(BaseDiscordClient client,
+        public static async Task<RestInviteMetadata> GetInviteAsync(BaseDiscordClient client,
             string inviteId, RequestOptions options)
         {
             var model = await client.ApiClient.GetInviteAsync(inviteId, options).ConfigureAwait(false);
             if (model != null)
-                return RestInvite.Create(client, null, null, model);
+                return RestInviteMetadata.Create(client, null, null, model);
             return null;
         }
         
