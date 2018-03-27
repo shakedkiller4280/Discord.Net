@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -32,6 +32,8 @@ namespace Discord.Rest
         Task<IInviteMetadata> IGuildChannel.CreateInviteAsync(int? maxAge, int? maxUses, bool isTemporary, bool isUnique, RequestOptions options)
             => throw new NotSupportedException();
         Task<IReadOnlyCollection<IInviteMetadata>> IGuildChannel.GetInvitesAsync(RequestOptions options)
+            => throw new NotSupportedException();
+        ulong? IGuildChannel.CategoryId
             => throw new NotSupportedException();
 
         //IChannel

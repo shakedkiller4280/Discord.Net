@@ -59,6 +59,8 @@ namespace Discord.WebSocket
             => throw new NotSupportedException();
         Task<IReadOnlyCollection<IInviteMetadata>> IGuildChannel.GetInvitesAsync(RequestOptions options)
             => throw new NotSupportedException();
+        ulong? IGuildChannel.CategoryId
+            => throw new NotSupportedException();
 
         //IChannel
         IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
