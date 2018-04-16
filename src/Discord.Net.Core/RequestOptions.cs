@@ -18,7 +18,11 @@ namespace Discord
         /// The reason for this action in the guild's audit log
         /// </summary>
         public string AuditLogReason { get; set; }
-
+        /// <summary>
+        /// Should this request bypass the ratelimit buckets? This option should be used sparingly, and when used, should be coupled with your own
+        /// delays between requests, to avoid encountering 429 errors.
+        /// </summary>
+        public bool BypassBuckets { get; set; }
         internal bool IgnoreState { get; set; }
         internal string BucketId { get; set; }
         internal bool IsClientBucket { get; set; }
