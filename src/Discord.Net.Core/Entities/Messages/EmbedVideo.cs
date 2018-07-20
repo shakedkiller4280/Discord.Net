@@ -18,6 +18,6 @@ namespace Discord
         }
 
         private string DebuggerDisplay => $"{Url} ({(Width != null && Height != null ? $"{Width}x{Height}" : "0x0")})";
-        public override string ToString() => Url.ToString();
+        public override string ToString() => Url;
     }
 }

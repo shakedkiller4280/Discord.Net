@@ -28,7 +28,7 @@ namespace Discord.API
 
         private CancellationTokenSource _connectCancelToken;
         private string _gatewayUrl;
-        private bool _isExplicitUrl;
+        private readonly bool _isExplicitUrl;
 
         //Store our decompression streams for zlib shared state
         private MemoryStream _compressed;

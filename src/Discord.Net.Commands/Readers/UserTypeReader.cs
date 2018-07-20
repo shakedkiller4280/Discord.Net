@@ -15,13 +15,12 @@ namespace Discord.Commands
             var results = new Dictionary<ulong, TypeReaderValue>();
             IAsyncEnumerable<IUser> channelUsers = context.Channel.GetUsersAsync(CacheMode.CacheOnly).Flatten(); // it's better
             IReadOnlyCollection<IGuildUser> guildUsers = ImmutableArray.Create<IGuildUser>();
-            ulong id;
 
             if (context.Guild != null)
                 guildUsers = await context.Guild.GetUsersAsync(CacheMode.CacheOnly).ConfigureAwait(false);
 
             //By Mention (1.0)
-            if (MentionUtils.TryParseUser(input, out id))
+            if (MentionUtils.TryParseUser(input, out var id))
             {
                 if (context.Guild != null)
                     AddResult(results, await context.Guild.GetUserAsync(id, CacheMode.CacheOnly).ConfigureAwait(false) as T, 1.00f);
@@ -71,8 +70,8 @@ namespace Discord.Commands
                     .Where(x => string.Equals(input, (x as IGuildUser)?.Nickname, StringComparison.OrdinalIgnoreCase))
                     .ForEachAsync(channelUser => AddResult(results, channelUser as T, (channelUser as IGuildUser).Nickname == input ? 0.65f : 0.55f));
 
-                foreach (var guildUser in guildUsers.Where(x => string.Equals(input, (x as IGuildUser).Nickname, StringComparison.OrdinalIgnoreCase)))
-                    AddResult(results, guildUser as T, (guildUser as IGuildUser).Nickname == input ? 0.60f : 0.50f);
+                foreach (var guildUser in guildUsers.Where(x => string.Equals(input, x.Nickname, StringComparison.OrdinalIgnoreCase)))
+                    AddResult(results, guildUser as T, guildUser.Nickname == input ? 0.60f : 0.50f);
             }
 
             if (results.Count > 0)

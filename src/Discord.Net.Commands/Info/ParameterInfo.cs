@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Discord.Commands
 {
@@ -23,7 +22,7 @@ namespace Discord.Commands
         public IReadOnlyList<ParameterPreconditionAttribute> Preconditions { get; }
         public IReadOnlyList<Attribute> Attributes { get; }
 
-        internal ParameterInfo(ParameterBuilder builder, CommandInfo command, CommandService service)
+        internal ParameterInfo(ParameterBuilder builder, CommandInfo command)
         {
             Command = command;
 

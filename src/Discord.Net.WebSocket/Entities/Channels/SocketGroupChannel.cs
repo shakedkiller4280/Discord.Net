@@ -21,7 +21,7 @@ namespace Discord.WebSocket
 
         private string _iconId;
         private ConcurrentDictionary<ulong, SocketGroupUser> _users;
-        private ConcurrentDictionary<ulong, SocketVoiceState> _voiceStates;
+        private readonly ConcurrentDictionary<ulong, SocketVoiceState> _voiceStates;
 
         public string Name { get; private set; }
 
@@ -34,7 +34,7 @@ namespace Discord.WebSocket
             : base(discord, id)
         {
             if (Discord.MessageCacheSize > 0)
-                _messages = new MessageCache(Discord, this);
+                _messages = new MessageCache(Discord);
             _voiceStates = new ConcurrentDictionary<ulong, SocketVoiceState>(ConcurrentHashSet.DefaultConcurrencyLevel, 5);
             _users = new ConcurrentDictionary<ulong, SocketGroupUser>(ConcurrentHashSet.DefaultConcurrencyLevel, 5);
         }
@@ -129,7 +129,7 @@ namespace Discord.WebSocket
         internal SocketGroupUser GetOrAddUser(UserModel model)
         {
             if (_users.TryGetValue(model.Id, out SocketGroupUser user))
-                return user as SocketGroupUser;
+                return user;
             else
             {
                 var privateUser = SocketGroupUser.Create(this, Discord.State, model);
@@ -143,7 +143,7 @@ namespace Discord.WebSocket
             if (_users.TryRemove(id, out SocketGroupUser user))
             {
                 user.GlobalUser.RemoveRef(Discord);
-                return user as SocketGroupUser;
+                return user;
             }
             return null;
         }

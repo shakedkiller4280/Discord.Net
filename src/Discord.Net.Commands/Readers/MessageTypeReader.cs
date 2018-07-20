@@ -9,10 +9,8 @@ namespace Discord.Commands
     {
         public override async Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
         {
-            ulong id;
-
             //By Id (1.0)
-            if (ulong.TryParse(input, NumberStyles.None, CultureInfo.InvariantCulture, out id))
+            if (ulong.TryParse(input, NumberStyles.None, CultureInfo.InvariantCulture, out var id))
             {
                 if (await context.Channel.GetMessageAsync(id, CacheMode.CacheOnly).ConfigureAwait(false) is T msg)
                     return TypeReaderResult.FromSuccess(msg);

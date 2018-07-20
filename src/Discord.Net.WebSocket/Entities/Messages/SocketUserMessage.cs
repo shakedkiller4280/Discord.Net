@@ -17,7 +17,7 @@ namespace Discord.WebSocket
         private ImmutableArray<Attachment> _attachments;
         private ImmutableArray<Embed> _embeds;
         private ImmutableArray<ITag> _tags;
-        private List<SocketReaction> _reactions = new List<SocketReaction>();
+        private readonly List<SocketReaction> _reactions = new List<SocketReaction>();
         
         public override bool IsTTS => _isTTS;
         public override bool IsPinned => _isPinned;

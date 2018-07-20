@@ -103,7 +103,7 @@ namespace Discord.Commands.Builders
             if (TypeReader == null)
                 throw new InvalidOperationException($"No type reader found for type {ParameterType.Name}, one must be specified");
 
-            return new ParameterInfo(this, info, Command.Module.Service);
+            return new ParameterInfo(this, info);
         }
     }
 }

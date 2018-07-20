@@ -98,11 +98,11 @@ namespace Discord.API
             await _stateLock.WaitAsync().ConfigureAwait(false);
             try
             {
-                await LoginInternalAsync(tokenType, token, options).ConfigureAwait(false);
+                await LoginInternalAsync(tokenType, token).ConfigureAwait(false);
             }
             finally { _stateLock.Release(); }
         }
-        private async Task LoginInternalAsync(TokenType tokenType, string token, RequestOptions options = null)
+        private async Task LoginInternalAsync(TokenType tokenType, string token)
         {
             if (LoginState != LoginState.LoggedOut)
                 await LogoutInternalAsync().ConfigureAwait(false);
@@ -123,7 +123,7 @@ namespace Discord.API
 
                 LoginState = LoginState.LoggedIn;
             }
-            catch (Exception)
+            catch
             {
                 await LogoutInternalAsync().ConfigureAwait(false);
                 throw;
@@ -164,7 +164,7 @@ namespace Discord.API
         //Core
         internal Task SendAsync(string method, Expression<Func<string>> endpointExpr, BucketIds ids,
              ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null)
-            => SendAsync(method, GetEndpoint(endpointExpr), GetBucketId(ids, endpointExpr, AuthTokenType, funcName), clientBucket, options);
+            => SendAsync(method, GetEndpoint(endpointExpr), GetBucketId(ids, endpointExpr, funcName), clientBucket, options);
         public async Task SendAsync(string method, string endpoint,
             string bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null)
         {
@@ -178,7 +178,7 @@ namespace Discord.API
 
         internal Task SendJsonAsync(string method, Expression<Func<string>> endpointExpr, object payload, BucketIds ids,
              ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null)
-            => SendJsonAsync(method, GetEndpoint(endpointExpr), payload, GetBucketId(ids, endpointExpr, AuthTokenType, funcName), clientBucket, options);
+            => SendJsonAsync(method, GetEndpoint(endpointExpr), payload, GetBucketId(ids, endpointExpr, funcName), clientBucket, options);
         public async Task SendJsonAsync(string method, string endpoint, object payload,
             string bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null)
         {
@@ -193,7 +193,7 @@ namespace Discord.API
 
         internal Task SendMultipartAsync(string method, Expression<Func<string>> endpointExpr, IReadOnlyDictionary<string, object> multipartArgs, BucketIds ids,
              ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null)
-            => SendMultipartAsync(method, GetEndpoint(endpointExpr), multipartArgs, GetBucketId(ids, endpointExpr, AuthTokenType, funcName), clientBucket, options);
+            => SendMultipartAsync(method, GetEndpoint(endpointExpr), multipartArgs, GetBucketId(ids, endpointExpr, funcName), clientBucket, options);
         public async Task SendMultipartAsync(string method, string endpoint, IReadOnlyDictionary<string, object> multipartArgs,
             string bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null)
         {
@@ -207,7 +207,7 @@ namespace Discord.API
 
         internal Task<TResponse> SendAsync<TResponse>(string method, Expression<Func<string>> endpointExpr, BucketIds ids,
              ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null) where TResponse : class
-            => SendAsync<TResponse>(method, GetEndpoint(endpointExpr), GetBucketId(ids, endpointExpr, AuthTokenType, funcName), clientBucket, options);
+            => SendAsync<TResponse>(method, GetEndpoint(endpointExpr), GetBucketId(ids, endpointExpr, funcName), clientBucket, options);
         public async Task<TResponse> SendAsync<TResponse>(string method, string endpoint,
             string bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null) where TResponse : class
         {
@@ -220,7 +220,7 @@ namespace Discord.API
 
         internal Task<TResponse> SendJsonAsync<TResponse>(string method, Expression<Func<string>> endpointExpr, object payload, BucketIds ids,
              ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null) where TResponse : class
-            => SendJsonAsync<TResponse>(method, GetEndpoint(endpointExpr), payload, GetBucketId(ids, endpointExpr, AuthTokenType, funcName), clientBucket, options);
+            => SendJsonAsync<TResponse>(method, GetEndpoint(endpointExpr), payload, GetBucketId(ids, endpointExpr, funcName), clientBucket, options);
         public async Task<TResponse> SendJsonAsync<TResponse>(string method, string endpoint, object payload,
             string bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null) where TResponse : class
         {
@@ -234,7 +234,7 @@ namespace Discord.API
 
         internal Task<TResponse> SendMultipartAsync<TResponse>(string method, Expression<Func<string>> endpointExpr, IReadOnlyDictionary<string, object> multipartArgs, BucketIds ids,
              ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null)
-            => SendMultipartAsync<TResponse>(method, GetEndpoint(endpointExpr), multipartArgs, GetBucketId(ids, endpointExpr, AuthTokenType, funcName), clientBucket, options);
+            => SendMultipartAsync<TResponse>(method, GetEndpoint(endpointExpr), multipartArgs, GetBucketId(ids, endpointExpr, funcName), clientBucket, options);
         public async Task<TResponse> SendMultipartAsync<TResponse>(string method, string endpoint, IReadOnlyDictionary<string, object> multipartArgs, 
             string bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null)
         {
@@ -1347,7 +1347,7 @@ namespace Discord.API
         {
             return endpointExpr.Compile()();
         }
-        private static string GetBucketId(BucketIds ids, Expression<Func<string>> endpointExpr, TokenType tokenType, string callingMethod)
+        private static string GetBucketId(BucketIds ids, Expression<Func<string>> endpointExpr, string callingMethod)
         {
             return _bucketIdGenerators.GetOrAdd(callingMethod, x => CreateBucketId(endpointExpr))(ids);
         }
@@ -1392,9 +1392,8 @@ namespace Discord.API
 
                     int argId = int.Parse(format.Substring(leftIndex + 1, rightIndex - leftIndex - 1));
                     string fieldName = GetFieldName(methodArgs[argId + 1]);
-                    int? mappedId;
-                    
-                    mappedId = BucketIds.GetIndex(fieldName);
+
+                    var mappedId = BucketIds.GetIndex(fieldName);
                     if(!mappedId.HasValue && rightIndex != endIndex && format.Length > rightIndex + 1 && format[rightIndex + 1] == '/') //Ignore the next slash
                         rightIndex++;
 

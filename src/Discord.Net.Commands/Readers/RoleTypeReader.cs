@@ -11,15 +11,13 @@ namespace Discord.Commands
     {
         public override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
         {
-            ulong id;
-
             if (context.Guild != null)
             {
                 var results = new Dictionary<ulong, TypeReaderValue>();
                 var roles = context.Guild.Roles;
 
                 //By Mention (1.0)
-                if (MentionUtils.TryParseRole(input, out id))
+                if (MentionUtils.TryParseRole(input, out var id))
                     AddResult(results, context.Guild.GetRole(id) as T, 1.00f);
 
                 //By Id (0.9)

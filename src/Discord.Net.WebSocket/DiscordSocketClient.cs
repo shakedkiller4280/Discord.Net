@@ -207,7 +207,7 @@ namespace Discord.WebSocket
                 await heartbeatTask.ConfigureAwait(false);
             _heartbeatTask = null;
 
-            while (_heartbeatTimes.TryDequeue(out long time)) { }
+            while (_heartbeatTimes.TryDequeue(out _)) { }
             _lastMessageTime = 0;
 
             await _gatewayLogger.DebugAsync("Waiting for guild downloader").ConfigureAwait(false);
@@ -508,7 +508,7 @@ namespace Discord.WebSocket
                                     {
                                         type = "GUILD_AVAILABLE";
                                         _lastGuildAvailableTime = Environment.TickCount;
-                                        await _gatewayLogger.DebugAsync($"Received Dispatch (GUILD_AVAILABLE)").ConfigureAwait(false);
+                                        await _gatewayLogger.DebugAsync("Received Dispatch (GUILD_AVAILABLE)").ConfigureAwait(false);
 
                                         var guild = State.GetGuild(data.Id);
                                         if (guild != null)
@@ -533,7 +533,7 @@ namespace Discord.WebSocket
                                     }
                                     else
                                     {
-                                        await _gatewayLogger.DebugAsync($"Received Dispatch (GUILD_CREATE)").ConfigureAwait(false);
+                                        await _gatewayLogger.DebugAsync("Received Dispatch (GUILD_CREATE)").ConfigureAwait(false);
 
                                         var guild = AddGuild(data, State);
                                         if (guild != null)
@@ -614,7 +614,7 @@ namespace Discord.WebSocket
                                     if (data.Unavailable == true)
                                     {
                                         type = "GUILD_UNAVAILABLE";
-                                        await _gatewayLogger.DebugAsync($"Received Dispatch (GUILD_UNAVAILABLE)").ConfigureAwait(false);
+                                        await _gatewayLogger.DebugAsync("Received Dispatch (GUILD_UNAVAILABLE)").ConfigureAwait(false);
 
                                         var guild = State.GetGuild(data.Id);
                                         if (guild != null)
@@ -630,7 +630,7 @@ namespace Discord.WebSocket
                                     }
                                     else
                                     {
-                                        await _gatewayLogger.DebugAsync($"Received Dispatch (GUILD_DELETE)").ConfigureAwait(false);
+                                        await _gatewayLogger.DebugAsync("Received Dispatch (GUILD_DELETE)").ConfigureAwait(false);
 
                                         var guild = RemoveGuild(data.Id);
                                         if (guild != null)
@@ -1092,8 +1092,8 @@ namespace Discord.WebSocket
                                         {
                                             if (guild != null)
                                                 author = guild.AddOrUpdateUser(data.Member.Value); //per g250k, we can create an entire member now
-                                            else if (channel is SocketGroupChannel)
-                                                author = (channel as SocketGroupChannel).GetOrAddUser(data.Author.Value);
+                                            else if (channel is SocketGroupChannel groupChannel)
+                                                author = groupChannel.GetOrAddUser(data.Author.Value);
                                             else
                                             {
                                                 await UnknownChannelUserAsync(type, data.Author.Value.Id, channel.Id).ConfigureAwait(false);
@@ -1679,7 +1679,7 @@ namespace Discord.WebSocket
             if (eventHandler.HasSubscribers)
             {
                 if (HandlerTimeout.HasValue)
-                    await TimeoutWrap(name, () => eventHandler.InvokeAsync()).ConfigureAwait(false);
+                    await TimeoutWrap(name, eventHandler.InvokeAsync).ConfigureAwait(false);
                 else
                     await eventHandler.InvokeAsync().ConfigureAwait(false);
             }

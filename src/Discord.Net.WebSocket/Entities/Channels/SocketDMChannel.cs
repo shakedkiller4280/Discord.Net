@@ -26,7 +26,7 @@ namespace Discord.WebSocket
             Recipient = recipient;
             recipient.GlobalUser.AddRef();
             if (Discord.MessageCacheSize > 0)
-                _messages = new MessageCache(Discord, this);
+                _messages = new MessageCache(Discord);
         }
         internal static SocketDMChannel Create(DiscordSocketClient discord, ClientState state, Model model)
         {
@@ -97,7 +97,7 @@ namespace Discord.WebSocket
             if (id == Recipient.Id)
                 return Recipient;
             else if (id == Discord.CurrentUser.Id)
-                return Discord.CurrentUser as SocketSelfUser;
+                return Discord.CurrentUser;
             else
                 return null;
         }

@@ -15,10 +15,9 @@ namespace Discord.Commands
             {
                 var results = new Dictionary<ulong, TypeReaderValue>();
                 var channels = await context.Guild.GetChannelsAsync(CacheMode.CacheOnly).ConfigureAwait(false);
-                ulong id;
 
                 //By Mention (1.0)
-                if (MentionUtils.TryParseChannel(input, out id))
+                if (MentionUtils.TryParseChannel(input, out var id))
                     AddResult(results, await context.Guild.GetChannelAsync(id, CacheMode.CacheOnly).ConfigureAwait(false) as T, 1.00f);
 
                 //By Id (0.9)

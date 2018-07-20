@@ -14,7 +14,7 @@ namespace Discord.WebSocket
 
         public IReadOnlyCollection<SocketMessage> Messages => _messages.ToReadOnlyCollection();
 
-        public MessageCache(DiscordSocketClient discord, IChannel channel)
+        public MessageCache(DiscordSocketClient discord)
         {
             _size = discord.MessageCacheSize;
             _messages = new ConcurrentDictionary<ulong, SocketMessage>(ConcurrentHashSet.DefaultConcurrencyLevel, (int)(_size * 1.05));
@@ -28,7 +28,7 @@ namespace Discord.WebSocket
                 _orderedMessages.Enqueue(message.Id);
 
                 while (_orderedMessages.Count > _size && _orderedMessages.TryDequeue(out ulong msgId))
-                    _messages.TryRemove(msgId, out SocketMessage msg);
+                    _messages.TryRemove(msgId, out _);
             }
         }
 
