@@ -40,6 +40,7 @@ namespace Discord.WebSocket
         public VerificationLevel VerificationLevel { get; private set; }
         public MfaLevel MfaLevel { get; private set; }
         public DefaultMessageNotifications DefaultMessageNotifications { get; private set; }
+        public ExplicitFilterLevel ExplicitFilterLevel { get; private set; }
         public int MemberCount { get; internal set; }
         public int DownloadedMemberCount { get; private set; }
         internal bool IsAvailable { get; private set; }
@@ -209,6 +210,7 @@ namespace Discord.WebSocket
             SplashId = model.Splash;
             VerificationLevel = model.VerificationLevel;
             MfaLevel = model.MfaLevel;
+            ExplicitFilterLevel = model.ExplicitFilterLevel;
             DefaultMessageNotifications = model.DefaultMessageNotifications;
 
             if (model.Emojis != null)

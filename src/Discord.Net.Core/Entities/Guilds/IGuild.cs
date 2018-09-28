@@ -19,6 +19,14 @@ namespace Discord
         MfaLevel MfaLevel { get; }
         /// <summary> Gets the level of requirements a user must fulfill before being allowed to post messages in this guild. </summary>
         VerificationLevel VerificationLevel { get; }
+        /// <summary>
+        ///     Gets the explicit content filter level set in this guild.
+        /// </summary>
+        /// <remarks>
+        ///     This property is used to determine what scan level this guild uses to automatically scan and delete
+        ///     messages that may contain inappropriate content.
+        /// </remarks>
+        ExplicitFilterLevel ExplicitFilterLevel { get; }
         /// <summary> Returns the id of this guild's icon, or null if one is not set. </summary>
         string IconId { get; }
         /// <summary> Returns the url to this guild's icon, or null if one is not set. </summary>
