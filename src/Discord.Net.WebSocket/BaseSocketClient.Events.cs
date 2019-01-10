@@ -82,17 +82,16 @@ namespace Discord.WebSocket
         internal readonly AsyncEvent<Func<SocketMessage, Task>> _messageReceivedEvent = new AsyncEvent<Func<SocketMessage, Task>>();
         /// <summary> Fired when a message is deleted. </summary>
         /// <remarks>
+        ///     <note type="important">
+        ///         It is not possible to retrieve the message via <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>, as 
+        ///         the message cannot be retrieved by Discord after the message had been deleted.
+        ///     </note>
         ///     <para>
         ///         This event is fired when a message is deleted. The event handler must return a
-        ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/> and 
+        ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/> and an
         ///         <see cref="ISocketMessageChannel"/> as its parameters.
         ///     </para>
         ///     <para>
-        ///         <note type="important">
-        ///             It is not possible to retrieve the message via
-        ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the message cannot be retrieved by Discord
-        ///             after the message has been deleted.
-        ///         </note>
         ///         If caching is enabled via <see cref="DiscordSocketConfig"/>, the
         ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the deleted message; otherwise, in event
         ///         that the message cannot be retrieved, the snowflake ID of the message is preserved in the 
@@ -113,17 +112,16 @@ namespace Discord.WebSocket
         ///     <note>
         ///         The <see cref="MessageDeleted"/> event will not be fired for individual messages contained in this event.
         ///     </note>
+        ///     <note type="important">
+        ///         It is not possible to retrieve the message via <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>, as 
+        ///         the message cannot be retrieved by Discord after the message had been deleted.
+        ///     </note>
         ///     <para>
-        ///         This event is fired when multiple messages are bulk deleted. The event handler must return a
-        ///         <see cref="Task"/> and accept an <see cref="IReadOnlyCollection{Cacheable{TEntity,TId}}"/> and 
-        ///         <see cref="ISocketMessageChannel"/> as its parameters.
+        ///         This event is fired when multiple messages are deleted at once. The event handler must return a
+        ///         <see cref="Task"/> and accept an <see cref="IReadOnlyCollection{T}"/> of <see cref="Cacheable{TEntity,TId}"/>
+        ///         and an <see cref="ISocketMessageChannel"/> as its parameters.
         ///     </para>
         ///     <para>
-        ///         <note type="important">
-        ///             It is not possible to retrieve the message via
-        ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the message cannot be retrieved by Discord
-        ///             after the message has been deleted.
-        ///         </note>
         ///         If caching is enabled via <see cref="DiscordSocketConfig"/>, the
         ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the deleted message; otherwise, in event
         ///         that the message cannot be retrieved, the snowflake ID of the message is preserved in the 
