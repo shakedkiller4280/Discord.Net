@@ -33,8 +33,13 @@ namespace Discord.WebSocket
         /// <inheritdoc />
         public Task SyncPermissionsAsync(RequestOptions options = null)
             => ChannelHelper.SyncPermissionsAsync(this, Discord, options);
-
-        /// <inheritdoc />
+        
+        /// <summary>
+        ///     Gets a collection of users that are in this voice channel.
+        /// </summary>
+        /// <returns>
+        ///     A read-only collection of users that are currently connected to this channel.
+        /// </returns>
         public override IReadOnlyCollection<SocketGuildUser> Users
             => Guild.Users.Where(x => x.VoiceChannel?.Id == Id).ToImmutableArray();
 
